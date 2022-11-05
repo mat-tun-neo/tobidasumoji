@@ -72,6 +72,12 @@ phina.define("SpriteCharacter", {
   },
   // 移動
   move: function(x, y) {
+    if (CHARACTER_MOVE_LIMIT) {
+      if (x < MOVE_LIMIT_X_MIN) x = MOVE_LIMIT_X_MIN;
+      if (x > MOVE_LIMIT_X_MAX) x = MOVE_LIMIT_X_MAX;
+      if (y < MOVE_LIMIT_Y_MIN) y = MOVE_LIMIT_Y_MIN;
+      if (y > MOVE_LIMIT_Y_MAX) y = MOVE_LIMIT_Y_MAX;
+    }
     this.sprite.tweener.fromJSON(CHAR_MOVE(x, y, this.width, this.height, this.speed));
     this.nameLabel.tweener.fromJSON(LABEL_MOVE(x, y, this.width, this.height, this.speed));
   },

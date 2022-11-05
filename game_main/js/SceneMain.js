@@ -93,8 +93,8 @@ phina.define("SceneMain", {
     //console.log("SceneMainクラスcreateQuestion");
     //console.log("QUESTION", QUESTION);
 
+    // アセットローダーのセット
     for (let i = 0; i < Object.keys(QUESTION).length; i++){
-      // アセットローダー
       let loader = phina.asset.AssetLoader();
       let key = zeroPadding(i, 3);
       let char_regex = QUESTION[key].regex;
@@ -107,6 +107,7 @@ phina.define("SceneMain", {
         let image = {
           [key] : "./images/character/" + response.data.answer + ".png" + datestr
         };
+        //console.log("image", image);
         let spritesheet = {
           [key]:
           {
@@ -120,39 +121,49 @@ phina.define("SceneMain", {
       }.bind(this))
       .catch(function (error) { console.log(error); })
       .finally(function () {});
-
-      // タッチ位置に穴の画像
-      let animation = "000";
-      if (DEBUG_MODE == 1) animation = "001";
-
-      let hole = SpriteHole(
-        key,
-        animation
-      ).addChildTo(this.holeGroup);
-      hole.sprite.setInteractive(true);
-      if (DEBUG_MODE == 1) {
-        hole.sprite.on('pointmove', function(e) {
-          hole.sprite.x += e.pointer.dx;
-          hole.sprite.y += e.pointer.dy;
-          console.log(key + "_x:", Math.round(hole.sprite.x), key + "_y:", Math.round(hole.sprite.y));
-        }.bind(this));
-      } else {
-        hole.sprite.onpointstart = function() {
-          // 穴の画像を変更
-          hole.change();
-          if (hole.animation == "001") {
-            // キャラクター描画
-            this.drawCharacter(key);
-          } else {
-            // キャラクター消去
-            this.eraseCharacter(key);
-          }
-        }.bind(this);
-      }
     }
+
+    // タイマー処理
+    var self = this;
+    setTimeout( function() {
+      // タッチイベント処理
+      for (let i = 0; i < Object.keys(QUESTION).length; i++){
+        let key = zeroPadding(i, 3);
+        // タッチ位置に穴の画像
+        let animation = "999";
+        if (DEBUG_MODE == 1) animation = key;
+
+        let hole = SpriteHole( key, animation ).addChildTo(self.holeGroup);
+        hole.sprite.setInteractive(true);
+        if (DEBUG_MODE == 1) {
+          hole.sprite.on('pointmove', function(e) {
+            hole.sprite.x += e.pointer.dx;
+            hole.sprite.y += e.pointer.dy;
+            console.log(key + "_x:", Math.round(hole.sprite.x), key + "_y:", Math.round(hole.sprite.y));
+          }.bind(self));
+        } else {
+          hole.sprite.onpointstart = function() {
+            // 穴の画像を変更
+            hole.change();
+            if (hole.pushed == true) {
+              // キャラクター描画
+              self.drawCharacter(key);
+            } else {
+              // キャラクター消去
+              self.eraseCharacter(key);
+            }
+          }.bind(this);
+        }
+      }
+    }, GAME_START_TIMER);
   },
   // キャラクター描画
   drawCharacter: function(key) {
+    this.mojiGroup.children.forEach(char=> {
+      if (key == char.key) {
+        char.removeSprite();
+      }
+    });
     let moji = SpriteCharacter(key).addChildTo(this.mojiGroup);
     moji.fadein();
   },

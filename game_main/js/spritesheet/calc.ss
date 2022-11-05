@@ -1,6 +1,8 @@
 const DEBUG_MODE = 0;              // 0: OFF, 1: ON
+const GAME_START_TIMER = 2000      // ゲーム開始までのタイマー（ms）
 const CHARACTER_SPEED_MIN = 500;   // キャラクターの移動スピード（MIN）
 const CHARACTER_SPEED_MAX = 1200;  // キャラクターの移動スピード（MAX）
+const CHARACTER_MOVE_LIMIT = false;// キャラクターの移動制限
 const FADEIN_TIME = 1000;          // キャラクターのフェードイン時間
 const FADEOUT_TIME = 1000;         // キャラクターのフェードアウト時間
 const LABEL_FONTSIZE = 30;         // ラベルのフォントサイズ
@@ -48,8 +50,20 @@ ASSETS.spritesheet["hole"] =
 {
   "frame": { "width": 200, "height": 200, "cols": 2, "rows": 1 },
   "animations" : {
-    "000": {"frames": [0],  "next": "000", "frequency": 1 },
-    "001": {"frames": [1],  "next": "001", "frequency": 1 }
+    "999": {"frames": [0],  "next": "999", "frequency": 1 },
+    "000": {"frames": [1],  "next": "000", "frequency": 1 },
+    "001": {"frames": [1],  "next": "001", "frequency": 1 },
+    "002": {"frames": [1],  "next": "002", "frequency": 1 },
+    "003": {"frames": [1],  "next": "003", "frequency": 1 },
+    "004": {"frames": [1],  "next": "004", "frequency": 1 },
+    "005": {"frames": [1],  "next": "005", "frequency": 1 },
+    "006": {"frames": [1],  "next": "006", "frequency": 1 },
+    "007": {"frames": [1],  "next": "007", "frequency": 1 },
+    "008": {"frames": [1],  "next": "008", "frequency": 1 },
+    "009": {"frames": [1],  "next": "009", "frequency": 1 },
+    "010": {"frames": [1],  "next": "010", "frequency": 1 },
+    "011": {"frames": [1],  "next": "011", "frequency": 1 },
+    "012": {"frames": [1],  "next": "012", "frequency": 1 }
   }
 }
 
