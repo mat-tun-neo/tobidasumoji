@@ -28,18 +28,6 @@ phina.define("SceneMain", {
   },
   // 画面更新
   update: function(app) {
-    if (this.title == null && app.frame > 50) {
-      // タイトル描画
-      this.title = SpriteTitle().addChildTo(this.buttonGroup);
-      if (DEBUG_MODE == 1) {
-        this.title.sprite.setInteractive(true);
-        this.title.sprite.on('pointmove', function(e) {
-          this.title.sprite.x += e.pointer.dx;
-          this.title.sprite.y += e.pointer.dy;
-          console.log("title_x:", Math.round(this.title.sprite.x), "title_y:", Math.round(this.title.sprite.y));
-        }.bind(this));
-      }
-    }
   },
   // Xボタン描画
   drawXButton: function() {
@@ -82,7 +70,19 @@ phina.define("SceneMain", {
       };
       // console.log("image", image);
       // console.log("spritesheet", spritesheet);
-      loader.load({ image, spritesheet });
+      loader.load({ image, spritesheet })
+      .then(function (){
+        // タイトル描画
+        let title = SpriteTitle().addChildTo(this.buttonGroup);
+        if (DEBUG_MODE == 1) {
+          title.sprite.setInteractive(true);
+          title.sprite.on('pointmove', function(e) {
+            title.sprite.x += e.pointer.dx;
+            title.sprite.y += e.pointer.dy;
+            console.log("title_x:", Math.round(title.sprite.x), "title_y:", Math.round(title.sprite.y));
+          }.bind(this));
+        }
+      }.bind(this));
 
     }.bind(this))
     .catch(function (error) { console.log(error); })
