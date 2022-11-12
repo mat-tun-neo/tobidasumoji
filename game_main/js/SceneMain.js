@@ -20,7 +20,6 @@ phina.define("SceneMain", {
     // Xボタン描画
     this.drawXButton();
     // タイトル描画
-    this.title;
     this.drawTitle();
     // 問題の作成
     this.createQuestion();
