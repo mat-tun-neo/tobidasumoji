@@ -15,6 +15,8 @@ const TITLE_FONTSIZE = 40;         // タイトルのフォントサイズ
 const TITLE_FILL = "white";        // タイトルのFILL色
 const TITLE_STROKE = "black";      // タイトルのSTROKE色
 const TITLE_STROKE_WIDTH = 5;      // タイトルのSTROKE幅
+const TITLE_WAIT = "しばらくおまちください";      // 待機タイトル
+
 
 // tweener定義
 const CHAR_MOVE = (x, y, w, h, t) => ({
@@ -29,12 +31,12 @@ const LABEL_MOVE = (x, y, w, h, t) => ({
     ['to', {x:x, y:y - LABEL_OFFSET, width:w, height:h}, t, 'easeOutElastic']
     ]
 });
-const CHAR_FADEIN = {
+const CHAR_FADEIN = (w, h) => ({
     tweens: [
     ['to', {width:80, height:80, alpha: 0.0}, 1],
-    ['to', {width:150, height:150, alpha: 1.0}, FADEIN_TIME, 'easeInQuad']
+    ['to', {width:w, height:h, alpha: 1.0}, FADEIN_TIME, 'easeInQuad']
     ]
-};
+});
 const CHAR_FADEOUT = {
     tweens: [
     ['to', {alpha: 1.0}, 1],

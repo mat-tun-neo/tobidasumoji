@@ -98,6 +98,9 @@ function releaseSemaphore(obj) {
   //console.log("releaseSemaphore", listSemaphore);
 }
 
+// スリープ処理
+const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
+
 /*
  * メイン処理
  */

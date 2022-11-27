@@ -11,6 +11,12 @@ phina.define("SpriteCharacter", {
     // 初期位置
     this.sprite.x = QUESTION[this.key].x;
     this.sprite.y = QUESTION[this.key].y;
+    if (QUESTION[key].fixed_x != null) {
+      this.sprite.x = QUESTION[key].fixed_x;
+    }
+    if (QUESTION[key].fixed_y != null) {
+      this.sprite.y = QUESTION[key].fixed_y;
+    }
     // サイズ
     this.width = QUESTION[this.key].char_size;
     this.height = QUESTION[this.key].char_size;
@@ -41,8 +47,8 @@ phina.define("SpriteCharacter", {
   },
   // フェードイン
   fadein: function() {
-    this.sprite.tweener.fromJSON(CHAR_FADEIN);
-    this.nameLabel.tweener.fromJSON(CHAR_FADEIN);
+    this.sprite.tweener.fromJSON(CHAR_FADEIN(this.width, this.height));
+    this.nameLabel.tweener.fromJSON(CHAR_FADEIN(this.width, this.height));
   },
   // フェードアウト
   fadeout: function() {
@@ -62,13 +68,17 @@ phina.define("SpriteCharacter", {
     this.changeMoji(label);
     let x = this.sprite.x + rand(-CHARACTER_MOVE, CHARACTER_MOVE);
     let y = this.sprite.y + rand(-CHARACTER_MOVE, CHARACTER_MOVE);
-    this.move(x, y);
+    if (QUESTION[this.key].move_flg != false) {
+      this.move(x, y);
+    }
   },
   // 通常移動（戻る）
   back: function() {
     this.sprite.tweener.clear();
     this.nameLabel.tweener.clear();
-    this.move(QUESTION[this.key].x, QUESTION[this.key].y);
+    if (QUESTION[this.key].move_flg != false && QUESTION[this.key].fixed_x == null && QUESTION[this.key].fixed_y == null) {
+      this.move(QUESTION[this.key].x, QUESTION[this.key].y);
+    }
   },
   // 移動
   move: function(x, y) {
@@ -80,6 +90,11 @@ phina.define("SpriteCharacter", {
     }
     this.sprite.tweener.fromJSON(CHAR_MOVE(x, y, this.width, this.height, this.speed));
     this.nameLabel.tweener.fromJSON(LABEL_MOVE(x, y, this.width, this.height, this.speed));
+  },
+  // 移動（固定）
+  set: function(x, y) {
+    this.sprite.tweener.fromJSON(CHAR_SET(x, y, this.width, this.height, this.speed));
+    this.nameLabel.tweener.fromJSON(LABEL_SET(x, y, this.width, this.height, this.speed));
   },
   // 更新
   update: function(app) {

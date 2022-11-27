@@ -17,6 +17,8 @@ phina.define("SceneMain", {
     this.buttonGroup = DisplayElement().addChildTo(this);
     this.holeGroup = DisplayElement().addChildTo(this);
     this.mojiGroup = DisplayElement().addChildTo(this);
+    // ラベル描画
+    this.titleLabel;
     // Xボタン描画
     this.drawXButton();
     // タイトル描画
@@ -45,6 +47,8 @@ phina.define("SceneMain", {
   // タイトル画像をアセットへ読込
   drawTitle: function() {
     //console.log("SceneMainクラスdrawTitle");
+    // 待機タイトル
+    this.drawWaitTitle();
     // アセットローダー
     let loader = phina.asset.AssetLoader();
     let key = "title";
@@ -81,11 +85,23 @@ phina.define("SceneMain", {
             console.log("title_x:", Math.round(title.sprite.x), "title_y:", Math.round(title.sprite.y));
           }.bind(this));
         }
+        // 待機タイトル消去
+        this.waitTitleLabel.remove();
       }.bind(this));
 
     }.bind(this))
     .catch(function (error) { console.log(error); })
     .finally(function () {});
+  },
+  // 待機タイトル描画
+  drawWaitTitle: function() {
+    console.log("SceneMainクラスdrawWaitTitle");
+    this.waitTitleLabel = Label({text: TITLE_WAIT}).addChildTo(this);
+    this.waitTitleLabel.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    this.waitTitleLabel.fontSize = TITLE_FONTSIZE;
+    this.waitTitleLabel.fill = TITLE_FILL;
+    this.waitTitleLabel.stroke = TITLE_STROKE;
+    this.waitTitleLabel.strokeWidth = TITLE_STROKE_WIDTH;
   },
   // 問題の作成
   createQuestion: function() {
@@ -136,7 +152,11 @@ phina.define("SceneMain", {
               hole.change();
               if (hole.pushed == true) {
                 // キャラクター描画
-                this.drawCharacter(key);
+                let wait_time = 0;
+                if (QUESTION[key].wait_time != null) { wait_time = QUESTION[key].wait_time };
+                sleep( wait_time ).then( ()=>{
+                  this.drawCharacter(key);
+                })
               } else {
                 // キャラクター消去
                 this.eraseCharacter(key);
