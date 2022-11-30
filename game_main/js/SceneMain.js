@@ -21,7 +21,10 @@ phina.define("SceneMain", {
     this.titleLabel;
     // Xボタン描画
     this.drawXButton();
+    // ロード完了数
+    this.loadCount = 0;
     // タイトル描画
+    this.title;
     this.drawTitle();
     // 問題の作成
     this.createQuestion();
@@ -76,17 +79,15 @@ phina.define("SceneMain", {
       loader.load({ image, spritesheet })
       .then(function (){
         // タイトル描画
-        let title = SpriteTitle().addChildTo(this.buttonGroup);
+        this.title = SpriteTitle().addChildTo(this.buttonGroup);
         if (DEBUG_MODE == 1) {
-          title.sprite.setInteractive(true);
-          title.sprite.on('pointmove', function(e) {
-            title.sprite.x += e.pointer.dx;
-            title.sprite.y += e.pointer.dy;
-            console.log("title_x:", Math.round(title.sprite.x), "title_y:", Math.round(title.sprite.y));
+          this.title.sprite.setInteractive(true);
+          this.title.sprite.on('pointmove', function(e) {
+            this.title.sprite.x += e.pointer.dx;
+            this.title.sprite.y += e.pointer.dy;
+            console.log("title_x:", Math.round(this.title.sprite.x), "title_y:", Math.round(this.title.sprite.y));
           }.bind(this));
         }
-        // 待機タイトル消去
-        this.waitTitleLabel.remove();
       }.bind(this));
 
     }.bind(this))
@@ -96,7 +97,7 @@ phina.define("SceneMain", {
   // 待機タイトル描画
   drawWaitTitle: function() {
     console.log("SceneMainクラスdrawWaitTitle");
-    this.waitTitleLabel = Label({text: TITLE_WAIT}).addChildTo(this);
+    this.waitTitleLabel = Label({text: TITLE_WAIT + "\n(" + this.loadCount + "/" + Object.keys(QUESTION).length + ")"}).addChildTo(this);
     this.waitTitleLabel.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     this.waitTitleLabel.fontSize = TITLE_FONTSIZE;
     this.waitTitleLabel.fill = TITLE_FILL;
@@ -148,20 +149,31 @@ phina.define("SceneMain", {
             }.bind(this));
           } else {
             hole.sprite.onpointstart = function() {
-              // 穴の画像を変更
-              hole.change();
-              if (hole.pushed == true) {
-                // キャラクター描画
-                let wait_time = 0;
-                if (QUESTION[key].wait_time != null) { wait_time = QUESTION[key].wait_time };
-                sleep( wait_time ).then( ()=>{
-                  this.drawCharacter(key);
-                })
-              } else {
-                // キャラクター消去
-                this.eraseCharacter(key);
+              if (this.loadCount == Object.keys(QUESTION).length) {
+                // 穴の画像を変更
+                hole.change();
+                if (hole.pushed == true) {
+                  // キャラクター描画
+                  let wait_time = 0;
+                  if (QUESTION[key].wait_time != null) { wait_time = QUESTION[key].wait_time };
+                  sleep( wait_time ).then( ()=>{
+                    this.drawCharacter(key);
+                  })
+                } else {
+                  // キャラクター消去
+                  this.eraseCharacter(key);
+                }
               }
             }.bind(this);
+          }
+          // ロード完了数
+          this.loadCount++;
+          this.title.loadCount = this.loadCount;
+          // 待機タイトルカウンタ
+          this.waitTitleLabel.text = TITLE_WAIT + "\n(" + this.loadCount + "/" + Object.keys(QUESTION).length + ")";
+          // 待機タイトル消去
+          if (this.loadCount == Object.keys(QUESTION).length) {
+            this.waitTitleLabel.remove();
           }
         }.bind(this));
       }.bind(this))

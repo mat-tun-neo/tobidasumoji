@@ -8,7 +8,9 @@ phina.define("SpriteTitle", {
     this.superInit("title", "000", TITLE.x, TITLE.y, TITLE.char_size, TITLE.char_size);
     // 文字
     this.nameLabel = Label().addChildTo(this);
-    this.addMoji(TITLE.label[0]);
+    this.addMoji("");
+    // 開始フラグ
+    this.loadCount = 0;
   },
   // 文字追加
   addMoji: function(str="") {
@@ -22,9 +24,13 @@ phina.define("SpriteTitle", {
   },
   // 更新
   update: function(app) {
-    // プレイヤー更新
-    if (app.frame % TITLE.update_frame == 0) {
-      this.nameLabel.text = TITLE.label[rand(0, Object.keys(TITLE.label).length - 1)];
-    };
+    if (this.loadCount == Object.keys(QUESTION).length) {
+      if (this.nameLabel.text == "") {
+        this.nameLabel.text = TITLE.label[0];
+      }
+      if (app.frame % TITLE.update_frame == 0) {
+        this.nameLabel.text = TITLE.label[rand(0, Object.keys(TITLE.label).length - 1)];
+      };
+    }
   }
 });

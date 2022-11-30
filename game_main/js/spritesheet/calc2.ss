@@ -1,5 +1,4 @@
 const DEBUG_MODE = 0;              // 0: OFF, 1: ON
-const GAME_START_TIMER = 2000      // ゲーム開始までのタイマー（ms）
 const CHARACTER_SPEED_MIN = 500;   // キャラクターの移動スピード（MIN）
 const CHARACTER_SPEED_MAX = 1200;  // キャラクターの移動スピード（MAX）
 const FADEIN_TIME = 1000;          // キャラクターのフェードイン時間
@@ -15,7 +14,7 @@ const TITLE_FONTSIZE = 40;         // タイトルのフォントサイズ
 const TITLE_FILL = "white";        // タイトルのFILL色
 const TITLE_STROKE = "black";      // タイトルのSTROKE色
 const TITLE_STROKE_WIDTH = 5;      // タイトルのSTROKE幅
-const TITLE_WAIT = "しばらくおまちください";      // 待機タイトル
+const TITLE_WAIT = "画像を読込中"; // 待機タイトル
 
 
 // tweener定義
