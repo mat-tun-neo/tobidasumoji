@@ -91,11 +91,6 @@ phina.define("SpriteCharacter", {
     this.sprite.tweener.fromJSON(CHAR_MOVE(x, y, this.width, this.height, this.speed));
     this.nameLabel.tweener.fromJSON(LABEL_MOVE(x, y, this.width, this.height, this.speed));
   },
-  // 移動（固定）
-  set: function(x, y) {
-    this.sprite.tweener.fromJSON(CHAR_SET(x, y, this.width, this.height, this.speed));
-    this.nameLabel.tweener.fromJSON(LABEL_SET(x, y, this.width, this.height, this.speed));
-  },
   // 更新
   update: function(app) {
     if ( this.frame == 0) {

@@ -22,16 +22,6 @@ const TITLE_WAIT = "画像を読込中";      // 待機タイトル
 
 
 // tweener定義
-const CHAR_SET = (x, y, w, h, t) => ({
-    tweens: [
-    ['to', {x:x, y:y, width:w, height:h}, t, 'easeOutElastic']
-    ]
-});
-const LABEL_SET = (x, y, w, h, t) => ({
-    tweens: [
-    ['to', {x:x, y:y - LABEL_OFFSET, width:w, height:h}, t, 'easeOutElastic']
-    ]
-});
 const CHAR_MOVE = (x, y, w, h, t) => ({
     tweens: [
     ['to', {width:w*1.25, height:h*0.4}, 1, 'easeOutElastic'],
